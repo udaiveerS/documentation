@@ -258,6 +258,10 @@ module.exports = {
             url: '/docs/chainlink-keepers/register-upkeep/',
           },
           {
+            title: 'Making Flexible Contracts',
+            url: '/docs/chainlink-keepers/flexible-upkeeps/',
+          },
+          {
             title: 'Utility Contracts',
             url: '/docs/chainlink-keepers/utility-contracts/'
           },

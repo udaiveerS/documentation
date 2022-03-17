@@ -4,9 +4,7 @@ section: ethereum
 date: Last Modified
 title: 'Register Keeper Upkeep for a Contract'
 whatsnext:
-  {
-    'FAQs': '/docs/chainlink-keepers/faqs/',
-  }
+  { 'Build flexible contracts': '/docs/chainlink-keepers/flexible-upkeeps/', 'FAQs': '/docs/chainlink-keepers/faqs/' }
 ---
 
 ## Overview
@@ -20,43 +18,44 @@ This guide explains how to register a Keeper-compatible contract with the Chainl
 After you register, you can interact directly with the [registry contract](https://etherscan.io/address/0x7b3EC232b08BD7b4b3305BE0C044D907B2DF960B#code) functions such as `cancelUpkeep` and `addFunds`.
 
 **Table of Contents**
-+ [Register Contract](#register-contract)
-+ [Fund Upkeep](#fund-upkeep)
-+ [How Funding Works](#how-funding-works)
-+ [Maintain a Minimum Balance](#maintain-a-minimum-balance)
-+ [Best Practices](#best-practices)
-  + [Gas Limits](#gas-limits)
-  + [Testing](#testing)
+
+- [Register Contract](#register-contract)
+- [Fund Upkeep](#fund-upkeep)
+- [How Funding Works](#how-funding-works)
+- [Maintain a Minimum Balance](#maintain-a-minimum-balance)
+- [Best Practices](#best-practices)
+  - [Gas Limits](#gas-limits)
+  - [Testing](#testing)
 
 ## Register Contract
 
 Registering an Upkeep with the Chainlink Keepers App notifies the Keeper Network about your contract and allows you to fund it so your work is performed continuously. As part of the registration, we’re requesting some information that will help us to deliver the optimal experience for your use case as we continue to improve the product.
 
 1. **Connect your wallet** with the button in the top right corner and choose a chain. For a list of supported networks, see the [Supported Blockchain Networks](../introduction/#supported-blockchain-networks) section. The Chain Keepers App also lists the currently supported networks.
-  ![Connect With Metamask](/images/contract-devs/keeper/keeper-metamask.png)
+   ![Connect With Metamask](/images/contract-devs/keeper/keeper-metamask.png)
 
 1. **Click the `Register new upkeep` button**
-  ![Click Register New Upkeep](/images/contract-devs/keeper/keeper-register.png)
+   ![Click Register New Upkeep](/images/contract-devs/keeper/keeper-register.png)
 
 1. **Fill out the registration form**
-    The information that you provide will be publicly visible on the blockchain.
+   The information that you provide will be publicly visible on the blockchain.
 
-     - You must enter an email to receive upkeep notifications. The email address will be encrypted.
-     - The gas limit of the [KeepersCounters.sol](/docs/chainlink-keepers/compatible-contracts#example-contract) example contract should be set to 200,000.
-     - The **Check data** field must be a hexadecimal value starting with `0x`.
-     - Specify a LINK starting balance to fund your Upkeep. If you need testnet LINK, see the [LINK Token Contracts](/docs/link-token-contracts/) page to find the LINK faucets available on your network.
+   - You must enter an email to receive upkeep notifications. The email address will be encrypted.
+   - The gas limit of the [KeepersCounters.sol](/docs/chainlink-keepers/compatible-contracts#example-contract) example contract should be set to 200,000.
+   - The **Check data** field must be a hexadecimal value starting with `0x`.
+   - Specify a LINK starting balance to fund your Upkeep. If you need testnet LINK, see the [LINK Token Contracts](/docs/link-token-contracts/) page to find the LINK faucets available on your network.
 
-    > ❗️ Funding Upkeep
-    > You should fund your contract with more LINK that you anticipate you will need. The network will not check or perform your Upkeep if your balance is too low based on current exchange rates.
-    >
-    > Your balance is charged LINK to run `performUpkeep`. Gas costs include the gas required for your Keeper-compatible contract to complete execution and an 80k overhead from the `KeeperRegistry` itself. The premium and overhead are not fixed and will change over time. See the [Network Configuration](/docs/chainlink-keepers/overview/#configuration) section to find the gas premium for your specific network.
+   > ❗️ Funding Upkeep
+   > You should fund your contract with more LINK that you anticipate you will need. The network will not check or perform your Upkeep if your balance is too low based on current exchange rates.
+   >
+   > Your balance is charged LINK to run `performUpkeep`. Gas costs include the gas required for your Keeper-compatible contract to complete execution and an 80k overhead from the `KeeperRegistry` itself. The premium and overhead are not fixed and will change over time. See the [Network Configuration](/docs/chainlink-keepers/overview/#configuration) section to find the gas premium for your specific network.
 
-    The gas limit of the example counter contract should be set to 200,000.
+   The gas limit of the example counter contract should be set to 200,000.
 
 1. **Click `Register upkeep`** and confirm the transaction in MetaMask
-  This sends a request to the Chainlink Keeper Network that will need to be manually approved. On testnets, requests are automatically approved.
+   This sends a request to the Chainlink Keeper Network that will need to be manually approved. On testnets, requests are automatically approved.
 
-    ![Upkeep Registration Success Message](/images/contract-devs/keeper/keeper-registration-submitted.png)
+   ![Upkeep Registration Success Message](/images/contract-devs/keeper/keeper-registration-submitted.png)
 
 After you complete registration, your upkeep will start being serviced after a predefined block confirmation time, which is less than 10 minutes. The number of block confirmations might differ depending on which blockchain you selected.
 
@@ -64,26 +63,26 @@ After you complete registration, your upkeep will start being serviced after a p
 
 After registration, you have to monitor the balance of your Upkeep. If the balance runs out then the Keepers network will not perform the Upkeep. Follow these steps to fund your Upkeep.
 
-  1. **Click `View Upkeep`** or go to the [Chainlink Keepers App](https://keepers.chain.link) and click on your recently registered Upkeep
-  
-  1. **Click the `Add funds` button**
-  
-  1. **Approve the LINK spend allowance** 
-    ![Approve LINK Spend Allowance](/images/contract-devs/keeper/keeper-approve-allowance.png)
-  
-  1. **Confirm the LINK transfer** by sending funds to the Chainlink Keeper Network Registry
-    ![Confirm LINK Transfer](/images/contract-devs/keeper/keeper-confirm-transfer.png)
-    
-  1. **Receive a success message** and verify that the funds were added to the Upkeep
-    ![Funds Added Successful Message](/images/contract-devs/keeper/keeper-add-funds.png)
+1. **Click `View Upkeep`** or go to the [Chainlink Keepers App](https://keepers.chain.link) and click on your recently registered Upkeep
+
+1. **Click the `Add funds` button**
+
+1. **Approve the LINK spend allowance**
+   ![Approve LINK Spend Allowance](/images/contract-devs/keeper/keeper-approve-allowance.png)
+
+1. **Confirm the LINK transfer** by sending funds to the Chainlink Keeper Network Registry
+   ![Confirm LINK Transfer](/images/contract-devs/keeper/keeper-confirm-transfer.png)
+
+1. **Receive a success message** and verify that the funds were added to the Upkeep
+   ![Funds Added Successful Message](/images/contract-devs/keeper/keeper-add-funds.png)
 
 ## How Funding Works
 
-* Your balance is reduced each time a Keeper executes your `performUpkeep` method.
-* There is no cost for `checkUpkeep` calls.
-* If you want to automate adding funds, you can directly call the `addFunds()` function on the `KeeperRegistry` contract.
-* Anyone can call the `addFunds()` function, not just the Upkeep owner.
-* To withdraw funds, cancel the Upkeep and then click **Withdraw funds**.
+- Your balance is reduced each time a Keeper executes your `performUpkeep` method.
+- There is no cost for `checkUpkeep` calls.
+- If you want to automate adding funds, you can directly call the `addFunds()` function on the `KeeperRegistry` contract.
+- Anyone can call the `addFunds()` function, not just the Upkeep owner.
+- To withdraw funds, cancel the Upkeep and then click **Withdraw funds**.
 
 ## Maintain a Minimum Balance
 
