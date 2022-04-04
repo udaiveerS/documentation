@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
 
 /**
  * Request testnet LINK and ETH here: https://faucets.chain.link/
@@ -9,71 +9,62 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
  */
 
 /**
- * @notice DO NOT USE THIS CODE IN PRODUCTION. This is an example contract.
+ * THIS IS AN EXAMPLE CONTRACT WHICH USES HARDCODED VALUES FOR CLARITY.
+ * PLEASE DO NOT USE THIS CODE IN PRODUCTION.
  */
-contract MultiWordConsumer is ChainlinkClient {
-  using Chainlink for Chainlink.Request;
+contract MultiWordConsumerKovan is ChainlinkClient {
+    using Chainlink for Chainlink.Request;
 
-  // variable bytes returned in a signle oracle response
-  bytes public data;
+    bytes32 private jobId;
+    uint256 private fee;
 
-  // multiple params returned in a single oracle response
-  uint256 public usd;
-  uint256 public eur;
-  uint256 public jpy;
+    // multiple params returned in a single oracle response
+    uint256 public usd;
+    uint256 public eur;
+    uint256 public jpy;
 
-  /**
-   * @notice Initialize the link token and target oracle
-   * @dev The oracle address must be an Operator contract for multiword response
-   */
-  constructor(
-    address link,
-    address oracle
-  ) {
-    setChainlinkToken(link);
-    setChainlinkOracle(oracle);
-  }
+    event RequestMultipleFulfilled(bytes32 indexed requestId, uint256 indexed usd, uint256 indexed eur, uint256 jpy);
 
+    /**
+     * Network: Kovan
+     * Oracle: 0xc57B33452b4F7BB189bB5AfaE9cc4aBa1f7a4FD8 (Chainlink Devrel
+     * Node)
+     * Job ID: 645661528ea44aa7b137ed9f9d54c3d5
+     * Fee: 0.1 LINK
+     */
+    constructor() {
+        setPublicChainlinkToken();
+        setChainlinkOracle(0xc57B33452b4F7BB189bB5AfaE9cc4aBa1f7a4FD8);
+        jobId = '645661528ea44aa7b137ed9f9d54c3d5';
+        fee = 0.1 * 10**18; // (Varies by network and job)
+    }
 
-  /**
-   * @notice Request mutiple parameters from the oracle in a single transaction
-   * @param specId bytes32 representation of the jobId in the Oracle
-   * @param payment uint256 cost of request in LINK (JUELS)
-   */
-  function requestMultipleParameters(
-    bytes32 specId,
-    uint256 payment
-  )
-    public
-  {
-    Chainlink.Request memory req = buildChainlinkRequest(specId, address(this), this.fulfillMultipleParameters.selector);
-    req.addUint("times", 10000);
-    sendChainlinkRequest(req, payment);
-  }
+    /**
+     * @notice Request mutiple parameters from the oracle in a single transaction
+     */
+    function requestMultipleParameters() public {
+        Chainlink.Request memory req = buildChainlinkRequest(
+            jobId,
+            address(this),
+            this.fulfillMultipleParameters.selector
+        );
+        req.addUint('times', 10000);
+        sendChainlinkRequest(req, fee);
+    }
 
-  event RequestMultipleFulfilled(
-    bytes32 indexed requestId,
-    uint256 indexed usd,
-    uint256 indexed eur,
-    uint256 jpy
-  );
-
-  /**
-   * @notice Fulfillment function for multiple parameters in a single request
-   * @dev This is called by the oracle. recordChainlinkFulfillment must be used.
-   */
-  function fulfillMultipleParameters(
-    bytes32 requestId,
-    uint256 usdResponse,
-    uint256 eurResponse,
-    uint256 jpyResponse
-  )
-    public
-    recordChainlinkFulfillment(requestId)
-  {
-    emit RequestMultipleFulfilled(requestId, usdResponse, eurResponse, jpyResponse);
-    usd = usdResponse;
-    eur = eurResponse;
-    jpy = jpyResponse;
-  }
+    /**
+     * @notice Fulfillment function for multiple parameters in a single request
+     * @dev This is called by the oracle. recordChainlinkFulfillment must be used.
+     */
+    function fulfillMultipleParameters(
+        bytes32 requestId,
+        uint256 usdResponse,
+        uint256 eurResponse,
+        uint256 jpyResponse
+    ) public recordChainlinkFulfillment(requestId) {
+        emit RequestMultipleFulfilled(requestId, usdResponse, eurResponse, jpyResponse);
+        usd = usdResponse;
+        eur = eurResponse;
+        jpy = jpyResponse;
+    }
 }

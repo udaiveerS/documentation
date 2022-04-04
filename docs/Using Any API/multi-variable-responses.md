@@ -9,7 +9,7 @@ whatsnext: {"Make an Existing Job Request":"/docs/existing-job-request/", "API R
 
 ## Overview
 
-This page explains how to make an HTTP GET request to an external API from a smart contract, using Chainlink's [Request & Receive Data](../request-and-receive-data/) cycle and then receive multiple responses.
+This guide explains how to make an HTTP GET request to an external API from a smart contract, using Chainlink's [Request & Receive Data](/docs/request-and-receive-data/) cycle and then receive multiple responses.
 
 This is known as **multi-variable** or **multi-word** responses.
 
@@ -46,13 +46,13 @@ To consume an API with multiple responses, your contract should inherit from [Ch
     <a href="/docs/conceptual-overview/#what-is-remix" >What is Remix?</a>
 </div>
 
-The job spec for the Chainlink node in this example can be [found here](../example-job-spec-multi-word/).
+The job spec for the Chainlink node in this example can be [found here](/docs/example-job-spec-multi-word/).
 
-If the LINK address for targeted blockchain is not [publicly available](../link-token-contracts/) yet, replace [setPublicChainlinkToken(/)](../chainlink-framework/#setpublicchainlinktoken) with [setChainlinkToken(_address)](../chainlink-framework/#setchainlinktoken) in the constructor, where `_address` is a corresponding LINK token contract.
+If the LINK address for targeted blockchain is not [publicly available](/docs/link-token-contracts/) yet, replace [setPublicChainlinkToken()](/docs/chainlink-framework/#setpublicchainlinktoken) with [setChainlinkToken(_address)](/docs/chainlink-framework/#setchainlinktoken) in the constructor, where `_address` is a corresponding LINK token contract.
 
 ## Choosing an Oracle and JobId
 
-`oracle` refers to a specific Chainlink node that a contract makes an API call from, and `specId` refers to a specific job for that node to run. Each job is unique and returns different types of data.
+`oracle` refers to a specific Chainlink node that a contract makes an API call from, and `jobId` refers to a specific job for that node to run. Each job is unique and returns different types of data.
 
 For example, a job that returns a `bytes32` variable from an API would have a different `specId` than a job that retrieved the same data, but in the form of a `uint256` variable.
 
