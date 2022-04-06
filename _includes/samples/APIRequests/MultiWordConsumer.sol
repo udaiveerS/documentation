@@ -12,7 +12,7 @@ import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
  * THIS IS AN EXAMPLE CONTRACT WHICH USES HARDCODED VALUES FOR CLARITY.
  * PLEASE DO NOT USE THIS CODE IN PRODUCTION.
  */
-contract MultiWordConsumerKovan is ChainlinkClient {
+contract MultiWordConsumer is ChainlinkClient {
     using Chainlink for Chainlink.Request;
 
     bytes32 private jobId;
